@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: produto
+          uri: http://localhost:8081/
+          predicates:
+            - Path=/api/v1/produto
+
+server:
+  port: 8080
