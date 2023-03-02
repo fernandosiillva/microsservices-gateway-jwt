@@ -1,13 +1,11 @@
 package com.authentication.controller;
 
+import com.authentication.domain.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.authentication.domain.User;
 import com.authentication.service.TokenService;
@@ -29,8 +27,14 @@ public class AuthenticationController {
 				new UsernamePasswordAuthenticationToken(user.getLogin(), 
 						user.getPassword());
 		
-		var authentication = authenticationManager.authenticate(token);
-    	return ResponseEntity.ok(tokenService.generateToken(user));
+		authenticationManager.authenticate(token);
+		Token tokenDTO = Token.builder().token(tokenService.generateToken(user)).build();
+		return ResponseEntity.ok(tokenDTO);
     }
-	
+
+	@GetMapping("/produto")
+	public ResponseEntity<?> busca(){
+
+		return ResponseEntity.ok("Notebook");
+	};
 }
