@@ -11,7 +11,7 @@ import com.authentication.domain.User;
 import com.authentication.service.TokenService;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/api/v1")
 public class AuthenticationController {
 
 	@Autowired
@@ -20,7 +20,7 @@ public class AuthenticationController {
 	@Autowired
 	TokenService tokenService;
 	
-	@PostMapping
+	@PostMapping("/login")
     public ResponseEntity login(@RequestBody User user) {
 
 		UsernamePasswordAuthenticationToken token = 
@@ -32,9 +32,14 @@ public class AuthenticationController {
 		return ResponseEntity.ok(tokenDTO);
     }
 
-	@GetMapping("/produto")
-	public ResponseEntity<?> busca(){
+	@PostMapping("/validateToken")
+	public ResponseEntity<?> validateToken(@RequestBody String token){
 
-		return ResponseEntity.ok("Notebook");
+		String subject = null;
+		if (token != null
+				&& !token.isBlank()){
+			subject = tokenService.getSubject(token);
+		}
+		return ResponseEntity.ok(subject);
 	};
 }

@@ -1,11 +1,17 @@
+---
 spring:
   cloud:
     gateway:
       routes:
         - id: produto
-          uri: http://localhost:8081/
+          uri: http://localhost:8081
           predicates:
             - Path=/api/v1/produto
-
+        - id: authentication
+          uri: http://localhost:8080
+          predicates:
+            - Path=/api/v1/login,/api/v1/validateToken
+  application:
+    name: api-gateway
 server:
-  port: 8080
+  port: 8082
