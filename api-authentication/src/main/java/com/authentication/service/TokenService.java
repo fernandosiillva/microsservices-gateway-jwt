@@ -27,7 +27,7 @@ public class TokenService {
 			return JWT.create()
 					.withIssuer("API-authentication")
 					.withSubject(user.getLogin())
-					.withExpiresAt(LocalDateTime.now().plusSeconds(10).toInstant(ZoneOffset.of("-03:00")))
+					.withExpiresAt(LocalDateTime.now().plusSeconds(30).toInstant(ZoneOffset.of("-03:00")))
 					.sign(algorithm);
 
 		} catch (JWTCreationException exception){
@@ -35,16 +35,16 @@ public class TokenService {
 		}
 	}
 
-	public String getSubject(String tokenJWT) {
+	public void validateToken(String tokenJWT) {
 		try {
 			var algoritmo = Algorithm.HMAC256(secret);
-			return JWT.require(algoritmo)
+			JWT.require(algoritmo)
 					.withIssuer("API-authentication")
 					.build()
 					.verify(tokenJWT)
 					.getSubject();
 		} catch (JWTVerificationException exception) {
-			throw new RuntimeException("Token JWT inválido ou expirado!");
+			throw new RuntimeException("Invalid or expired JWT token!");
 		}
 	}
 }

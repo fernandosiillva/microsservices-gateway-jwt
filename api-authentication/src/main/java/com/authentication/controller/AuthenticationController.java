@@ -21,25 +21,20 @@ public class AuthenticationController {
 	TokenService tokenService;
 	
 	@PostMapping("/login")
-    public ResponseEntity login(@RequestBody User user) {
+	public ResponseEntity login(@RequestBody User user) {
 
-		UsernamePasswordAuthenticationToken token = 
-				new UsernamePasswordAuthenticationToken(user.getLogin(), 
+		UsernamePasswordAuthenticationToken token =
+				new UsernamePasswordAuthenticationToken(user.getLogin(),
 						user.getPassword());
-		
+
 		authenticationManager.authenticate(token);
 		Token tokenDTO = Token.builder().token(tokenService.generateToken(user)).build();
 		return ResponseEntity.ok(tokenDTO);
-    }
+	}
 
-	@PostMapping("/validateToken")
-	public ResponseEntity<?> validateToken(@RequestBody String token){
-
-		String subject = null;
-		if (token != null
-				&& !token.isBlank()){
-			subject = tokenService.getSubject(token);
-		}
-		return ResponseEntity.ok(subject);
+	@GetMapping("/validateToken")
+	public ResponseEntity<?> validateToken(@RequestParam("token") String token){
+		tokenService.validateToken(token);
+		return ResponseEntity.ok("Invalid Token!");
 	};
 }

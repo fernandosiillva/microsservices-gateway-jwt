@@ -7,10 +7,12 @@ spring:
           uri: http://localhost:8081
           predicates:
             - Path=/api/v1/produto
+          filters:
+            - AuthenticationFilter
         - id: authentication
           uri: http://localhost:8080
           predicates:
-            - Path=/api/v1/login,/api/v1/validateToken
+            - Path=/api/v1/**
   application:
     name: api-gateway
 server:
